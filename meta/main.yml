@@ -1,0 +1,27 @@
+galaxy_info:
+  namespace: lorephoenix
+  role_name: pve_ct_download
+  author: Christophe Vemeren
+  description: Clone Proxmox download CT images
+  company: Independent
+  license: MIT
+  min_ansible_version: "2.11"
+  platforms:
+    - name: EL
+      versions:
+        - "9"
+    - name: ArchLinux
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - bookworm
+    - name: Gentoo
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - noble
+  galaxy_tags:
+    - proxmox
+dependencies: []
