@@ -1,4 +1,4 @@
-Role Name
+Ansible Role: pve_ct_downloa
 =========
 
 This Ansible role is designed to manage and prepare environments for downloading container templates on Proxmox VE (PVE). It ensures the necessary dependencies are installed, variables are loaded, and the system is properly configured to execute related tasks.
