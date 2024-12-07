@@ -1,0 +1,66 @@
+---
+# tasks file for pve_ct_download
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Load variables from files, dynamically within a task
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Load OS dependent variables
+  ansible.builtin.include_vars: '{{ item_os }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version | lower }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+        - '{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version | lower }}.yml'
+        - '{{ ansible_os_family | lower }}.yml'
+      skip: false
+  loop_control:
+    loop_var: item_os
+
+# -----------------------------------------------------------------------------
+# Ensure variable(s) meets condition(s)
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | main | OS is supported.
+  ansible.builtin.assert:
+    that: os_supported == True
+
+# -----------------------------------------------------------------------------
+# Use universal package manager to install required package(s)
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Ensure that the Linux packages are installed
+  become: true
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  with_items: "{{ linux_pkgs }}"
+
+# -----------------------------------------------------------------------------
+# Manage Python library dependencies
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Install python package
+  ansible.builtin.pip:
+    break_system_packages: true
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ python_module_pkgs }}"
+  when:
+    - python_module_pkgs is defined
+    - python_module_pkgs|length > 0
+
+# -----------------------------------------------------------------------------
+# Import task the current playbook for subsequent execution
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Import 'preliminary' task statically
+  ansible.builtin.import_tasks: "preliminary.yml"
+  tags:
+    - preliminary
+
+- name: (pve_ct_download) | main | Import 'proxmox' task statically
+  ansible.builtin.import_tasks: "proxmox.yml"
