@@ -1,0 +1,13 @@
+---
+# vars file of pve_ct_download
+
+os_supported: true
+linux_pkgs:
+  - python3-pip
+  - python3-requests
+  - python3-setuptools
+python_module_pkgs:
+  - openssh_wrapper
+  - paramiko
+  - proxmoxer
+  - virtualenv
