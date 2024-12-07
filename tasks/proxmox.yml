@@ -1,0 +1,54 @@
+---
+# tasks file for pve_ct_download
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Retrieves a list of nodes in the Proxmox cluster.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | proxmox | List existing nodes
+  community.general.proxmox_node_info:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  register: this
+
+# -----------------------------------------------------------------------------
+# Filters and selects nodes for template application.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | proxmox | Filter nodes
+  ansible.builtin.set_fact:
+    nodes: >-
+      {{ this.proxmox_nodes | map(attribute='node') }}
+
+# -----------------------------------------------------------------------------
+# Downloads the latest template image to the specified storage on the
+# selected nodes.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | proxmox | Download Proxmox appliance container template(s)
+  community.general.proxmox_template:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    node: "{{ item }}"
+    state: "{{ pve_state }}"
+    storage: "{{ pve_storage | default('local') }}"
+    template: "{{ latest_image }}"
+    timeout: "{{ pve_timeout | default(0) }}"
+    force: "{{ pve_force | default(false) }}"
+  with_items:
+    - "{{ nodes }}"
+  when:
+    - latest_image is defined
+    - latest_image != ""
