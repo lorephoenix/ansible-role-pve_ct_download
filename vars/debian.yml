@@ -1,0 +1,10 @@
+---
+# vars file of pve_ct_download
+
+os_supported: true
+linux_pkgs:
+  - python3-setuptools
+  - python3-proxmoxer
+  - python3-requests
+  - python3-virtualenv
+python_module_pkgs: []
