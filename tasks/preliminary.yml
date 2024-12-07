@@ -1,0 +1,41 @@
+---
+# tasks file for pve_ct_download
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Fetches the list of templates from the specified URL.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | preliminary | Get the list of files from the URL
+  ansible.builtin.uri:
+    url: "{{ pve_base_url }}"
+    return_content: true
+  register: this
+  failed_when: "'amd64.tar.' not in this.content"
+
+# -----------------------------------------------------------------------------
+# Extracts the latest image for the specified OS based on naming conventions.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | preliminary | Parse the latest image for the specified OS
+  ansible.builtin.set_fact:
+    latest_image: >-
+      {{
+        this.content |
+        regex_findall('href="([^"]*' + pve_package | string + '[^"]*amd64\.tar\.[(zst|gz|xz)]*)"') |
+        sort |
+        last
+      }}
+
+# -----------------------------------------------------------------------------
+# Ensures that a valid image is found for the OS, or the task fails.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | preliminary | Fail if no image is found for the specified OS
+  ansible.builtin.fail:
+    msg: "No image found for OS {{ pve_package }}."
+  when: latest_image is not defined
