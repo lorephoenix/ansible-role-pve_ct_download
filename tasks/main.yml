@@ -23,6 +23,8 @@
       skip: false
   loop_control:
     loop_var: item_os
+  tags:
+    - pve_ct_download
 
 # -----------------------------------------------------------------------------
 # Ensure variable(s) meets condition(s)
@@ -30,6 +32,8 @@
 - name: (pve_ct_download) | main | OS is supported.
   ansible.builtin.assert:
     that: os_supported == True
+  tags:
+    - pve_ct_download
 
 # -----------------------------------------------------------------------------
 # Use universal package manager to install required package(s)
@@ -40,6 +44,8 @@
     name: '{{ item }}'
     state: present
   with_items: "{{ linux_pkgs }}"
+  tags:
+    - pve_ct_download
 
 # -----------------------------------------------------------------------------
 # Manage Python library dependencies
@@ -53,6 +59,8 @@
   when:
     - python_module_pkgs is defined
     - python_module_pkgs|length > 0
+  tags:
+    - pve_ct_download
 
 # -----------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
@@ -61,6 +69,9 @@
   ansible.builtin.import_tasks: "preliminary.yml"
   tags:
     - preliminary
+    - pve_ct_download
 
 - name: (pve_ct_download) | main | Import 'proxmox' task statically
   ansible.builtin.import_tasks: "proxmox.yml"
+  tags:
+    - pve_ct_download
