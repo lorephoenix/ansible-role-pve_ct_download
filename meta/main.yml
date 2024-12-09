@@ -25,3 +25,5 @@ galaxy_info:
   galaxy_tags:
     - proxmox
 dependencies: []
+collections:
+  - community.general
