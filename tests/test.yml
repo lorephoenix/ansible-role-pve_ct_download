@@ -7,6 +7,6 @@
         pve_host: "pve1.example.com"
         pve_package: "archlinux-base"
         pve_state: "present"
-        pve_storage: "local"
+        pve_storage_templates: "local"
         pve_tokenid: "root@pam!Ansible"
         pve_token_secret: "secret"
