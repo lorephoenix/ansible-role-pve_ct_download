@@ -43,7 +43,7 @@
     api_user: "{{ pve_tokenid.split('!')[0] }}"
     node: "{{ item }}"
     state: "{{ pve_state }}"
-    storage: "{{ pve_storage | default('local') }}"
+    storage: "{{ pve_storage_templates | default('local') }}"
     template: "{{ latest_image }}"
     timeout: "{{ pve_timeout | default(0) }}"
     force: "{{ pve_force | default(false) }}"
