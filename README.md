@@ -28,8 +28,8 @@ The following variables can be customized to suit your environment. Default valu
 | `pve_host`             | `proxmox.example.com`                        | String  | Mandatory | Proxmox host address.                            |
 | `pve_package`          | `archlinux-base`                             | String  | Mandatory | The OS package name to search for.               |
 | `pve_port`             | `8006`                                       | Integer | Optional  | Proxmox API port.                                |
-| `pve_state`            | `present`                                    | String  | Mandatory | State for the template (present or absent).      |
-| `pve_storage_templates`| `local-lvm`                                  | String  | Mandatory | Target storage for the template.                 |
+| `pve_template_state`   | `present`                                    | String  | Mandatory | State for the template (present or absent).      |
+| `pve_template_storage` | `local-lvm`                                  | String  | Mandatory | Target storage for the template.                 |
 | `pve_timeout`          | `500`                                        | Integer | Optional  | Timeout for template downloads.                  |
 | `pve_tokenid`          | `root@pam!mytokenid`                         | String  | Mandatory | API token ID for authentication.                 |
 | `pve_token_secret `    | `*******`                                    | String  | Mandatory | API secret token                                 |
@@ -63,8 +63,8 @@ Here’s an example of how to use this role:
         pve_base_url: "http://download.proxmox.com/images/system/"
         pve_host: "pve1.example.com"
         pve_package: "archlinux-base"
-        pve_state: "present"
-        pve_storage_templates: "local"
+        pve_template_state: "present"
+        pve_template_storage: "local"
         pve_tokenid: "root@pam!Ansible"
 ```
 
