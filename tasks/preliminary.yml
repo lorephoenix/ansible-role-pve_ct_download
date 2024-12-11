@@ -27,7 +27,7 @@
     latest_image: >-
       {{
         this.content |
-        regex_findall('href="([^"]*' + pve_package | string + '[^"]*amd64\.tar\.[(zst|gz|xz)]*)"') |
+        regex_findall('href="([^"]*' + pve_package | string + '[^"]*amd64\.tar\.[(zst|xz)]*)"') |
         sort |
         last
       }}
