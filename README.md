@@ -25,21 +25,21 @@ The following variables can be customized to suit your environment. Default valu
 
 | Variable | Value | Data Type | Required | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `pve_base_url`        | `http://download.proxmox.com/images/system/` | String        | Mandatory | Base URL to fetch container templates.           |
-| `pve_force`           | `false`                                      | Boolean       | Optional  | Force download if the template already exists.   |  
-| `pve_host`            | `proxmox.example.com`                        | String        | Mandatory | Proxmox host address.                            |
-| `pve_port`            | `8006`                                       | Integer       | Optional  | Proxmox API port.                                |
-| `pve_timeout`         | `500`                                        | Integer       | Optional  | Timeout for template downloads.                  |
-| `pve_tokenid`         | `root@pam!mytokenid`                         | String        | Mandatory | API token ID for authentication.                 |
-| `pve_token_secret `   | `*******`                                    | String        | Mandatory | API secret token                                 |
-| `pve_validate_certs`  | `false`                                      | Boolean       | Optional  | Whether to validate SSL certificates.            |
+| `pve_force`           | `false`               | Boolean  | Optional  | Force download if the template already exists.   |  
+| `pve_host`            | `proxmox.example.com` | String   | Mandatory | Proxmox host address.                            |
+| `pve_port`            | `8006`                | Integer  | Optional  | Proxmox API port.                                |
+| `pve_timeout`         | `500`                 | Integer  | Optional  | Timeout for template downloads.                  |
+| `pve_tokenid`         | `root@pam!mytokenid`  | String   | Mandatory | API token ID for authentication.                 |
+| `pve_token_secret `   | `*******`             | String   | Mandatory | API secret token                                 |
+| `pve_validate_certs`  | `false`               | Boolean  | Optional  | Whether to validate SSL certificates.            |
 
 
 ### Container Deployment Variables
 
-| Variable        | Value    | Data Type     | Required  | Description                        |
-| :---            | :---     | :---          | :---      | :---                               |
-| `pve_template`  | `debian` | String or List| Mandatory | The OS package name to search for. |
+| Variable        | Value                                        | Data Type     | Required  | Description                            |
+| :---            | :---                                         | :---          | :---      | :---                                   |
+| `pve_base_url`  | `http://download.proxmox.com/images/system/` | String        | Mandatory | Base URL to fetch container templates. |
+| `pve_template`  | `debian`                                     | String or List| Mandatory | The OS package name to search for.     |
 
 
 Dependencies
