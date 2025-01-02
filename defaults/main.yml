@@ -5,10 +5,9 @@
 pve_base_url: "http://download.proxmox.com/images/system/"
 pve_force: false
 pve_host: "proxmox.example.com"
-pve_package: "archlinux-base"
+pve_package: "debian"
 pve_port: 8006
 pve_template_state: "present"
-pve_template_storage: "local"
 pve_timeout: 500
 pve_tokenid: "root@pam!mytokenid"
 pve_token_secret: ""
