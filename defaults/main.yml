@@ -11,7 +11,6 @@
 
 # Proxmox connection details
 pve_host: "proxmox.example.com"
-pve_timeout: 500
 pve_tokenid: "root@pam!mytokenid"
 pve_token_secret: null
 
