@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: (playbook) | Proxmox download latest CT images
+  hosts: localhost
   roles:
     - role: pve_ct_download
       vars:
