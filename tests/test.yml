@@ -5,8 +5,19 @@
       vars:
         pve_base_url: "http://download.proxmox.com/images/system/"
         pve_host: "pve1.example.com"
-        pve_package: "archlinux-base"
+        pve_port: 8006
         pve_template_state: "present"
-        pve_template_storage: "local"
         pve_tokenid: "root@pam!Ansible"
         pve_token_secret: "secret"
+        pve_package: 
+          - "almalinux"
+          - "alpine"
+          - "centos"
+          - "debian"
+          - "devuan"
+          - "fedora"
+          - "gentoo"
+          - "openeuler"
+          - "opensuse"
+          - "rockylinux"
+          - "ubuntu"
