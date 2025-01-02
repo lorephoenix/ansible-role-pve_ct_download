@@ -4,13 +4,18 @@
   roles:
     - role: pve_ct_download
       vars:
-        pve_base_url: "http://download.proxmox.com/images/system/"
+        # Proxmox Connection Details
+        pve_force: false
         pve_host: "pve1.example.com"
         pve_port: 8006
-        pve_template_state: "present"
+        pve_timeout: 500
         pve_tokenid: "root@pam!Ansible"
         pve_token_secret: "secret"
-        pve_package: 
+        pve_validate_certs: false
+        
+        # Template items
+        pve_base_url: "http://download.proxmox.com/images/system/"
+        pve_template: 
           - "almalinux"
           - "alpine"
           - "centos"
