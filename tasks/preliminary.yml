@@ -17,20 +17,15 @@
     url: "{{ pve_base_url }}"
     return_content: true
   register: this
-  failed_when: "'amd64.tar.' not in this.content"
+  failed_when: 
+    - "this.status != 200"
 
 # -----------------------------------------------------------------------------
 # Extracts the latest image for the specified OS based on naming conventions.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | preliminary | Parse the latest image for the specified OS
+- name: (pve_ct_download) | preliminary | Extract and parse images and date from content
   ansible.builtin.set_fact:
-    latest_image: >-
-      {{
-        this.content |
-        regex_findall('href="([^"]*' + pve_package | string + '[^"]*amd64\.tar\.[(zst|xz)]*)"') |
-        sort |
-        last
-      }}
+    latest_image: "{{ this.content | lastest_image( pve_package ) }}"
 
 # -----------------------------------------------------------------------------
 # Ensures that a valid image is found for the OS, or the task fails.
@@ -38,4 +33,6 @@
 - name: (pve_ct_download) | preliminary | Fail if no image is found for the specified OS
   ansible.builtin.fail:
     msg: "No image found for OS {{ pve_package }}."
-  when: latest_image is not defined
+  when: 
+    - latest_image is not defined
+    - latest_image|length == 0
