@@ -2,13 +2,11 @@
 # defaults file for pve_ct_download
 
 # Proxmox connection details
-pve_base_url: "http://download.proxmox.com/images/system/"
-pve_force: false
 pve_host: "proxmox.example.com"
-pve_package: "debian"
-pve_port: 8006
-pve_template_state: "present"
 pve_timeout: 500
 pve_tokenid: "root@pam!mytokenid"
-pve_token_secret: ""
-pve_validate_certs: false
+pve_token_secret: null
+
+# Container template
+pve_base_url: "http://download.proxmox.com/images/system/"
+pve_template: "debian"
