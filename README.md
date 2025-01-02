@@ -34,7 +34,7 @@ The following variables can be customized to suit your environment. Default valu
 | `pve_validate_certs`  | `false`               | Boolean  | Optional  | Whether to validate SSL certificates.            |
 
 
-### Container Deployment Variables
+### Template items
 
 | Variable        | Value                                        | Data Type     | Required  | Description                            |
 | :---            | :---                                         | :---          | :---      | :---                                   |
@@ -66,9 +66,12 @@ Here’s an example of how to use this role:
   roles:
     - role: pve_ct_download
       vars:
-        pve_base_url: "http://download.proxmox.com/images/system/"
+        # Proxmox Connection Details
         pve_host: "pve1.example.com"
         pve_tokenid: "root@pam!Ansible"
+
+        # Template items
+        pve_base_url: "http://download.proxmox.com/images/system/"
         pve_template: 
           - "centos"
           - "ubuntu"
