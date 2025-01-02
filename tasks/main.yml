@@ -87,6 +87,8 @@
         api_user: "{{ pve_tokenid.split('!')[0] }}"
         validate_certs: "{{ pve_validate_certs | default(false) }}"
       register: this
+      tags:
+        - prerequisite
 
     # -------------------------------------------------------------------------
     # Filters and selects nodes for template application.
@@ -95,6 +97,8 @@
       ansible.builtin.set_fact:
         nodes: >-
           {{ this.proxmox_nodes | map(attribute='node') }}
+      tags:
+        - prerequisite
 
     # -------------------------------------------------------------------------
     # Downloads the latest template image to the specified storage on the
@@ -109,6 +113,8 @@
         api_user: "{{ pve_tokenid.split('!')[0] }}"
         validate_certs: "{{ pve_validate_certs | default(false) }}"
       register: this
+      tags:
+        - prerequisite
 
     # -------------------------------------------------------------------------
     # Filters storages that support template storage and ensures at least one is available.
@@ -117,11 +123,15 @@
       ansible.builtin.set_fact:
         filtered_storages: >-
             {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
+      tags:
+        - prerequisite
 
     - name: (pve_ct_download) | main | Fail if no suitable storage is found
       ansible.builtin.fail:
         msg: "No suitable storage(s) supporting VZ templates found in the cluster."
       when: filtered_storages|length == 0
+      tags:
+        - prerequisite
 
     - name: (pve_ct_download) | main | Download Proxmox appliance container template(s)
       community.general.proxmox_template:
