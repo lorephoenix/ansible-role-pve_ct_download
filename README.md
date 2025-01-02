@@ -62,7 +62,7 @@ Here’s an example of how to use this role:
 - name: (playbook) | Proxmox download latest CT image
   hosts: localhost
   vars_files:
-    - vault.yml  # Load encrypted file with Proxmox token
+    - vault.yml  # Load encrypted file with Proxmox token (pve_token_secret)
   roles:
     - role: pve_ct_download
       vars:
