@@ -1,0 +1,64 @@
+---
+# tasks file for pve_ct_download
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Retrieves a list of nodes in the Proxmox cluster.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | with_token | Retrieve Proxmox node information
+  community.general.proxmox_node_info:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  register: pnodes
+  tags:
+    - prerequisite
+
+# -----------------------------------------------------------------------------
+# Downloads the latest template image to the specified storage on the
+# selected nodes.
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | with_token | Retrieve Proxmox storage information
+  community.general.proxmox_storage_info:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  register: this
+  tags:
+    - prerequisite
+
+# -----------------------------------------------------------------------------
+# Import task the current playbook for subsequent execution
+# -----------------------------------------------------------------------------
+- name: (pve_ct_download) | with_token | Import 'set_facts' task statically
+  ansible.builtin.import_tasks: "facts.yml"
+  tags:
+    - prerequisite
+
+- name: (pve_ct_download) | with_token | Download Proxmox appliance container template(s)
+  community.general.proxmox_template:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    node: "{{ item.0 }}"
+    state: "present"
+    storage: "{{ item.1 }}"
+    template: "{{ item.2 }}"
+    timeout: "{{ pve_timeout | default(0) }}"
+    force: "{{ pve_force | default(false) }}"
+  loop: "{{ query('nested', nodes, filtered_storages, latest_image) }}"
