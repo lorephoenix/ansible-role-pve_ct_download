@@ -25,8 +25,7 @@
     - prerequisite
 
 # -----------------------------------------------------------------------------
-# Downloads the latest template image to the specified storage on the
-# selected nodes.
+# Retrieve Proxmox storage information.
 # -----------------------------------------------------------------------------
 - name: (pve_ct_download) | with_token | Retrieve Proxmox storage information
   community.general.proxmox_storage_info:
@@ -48,6 +47,10 @@
   tags:
     - prerequisite
 
+# -----------------------------------------------------------------------------
+# Downloads the latest template image to the specified storage on the
+# selected nodes.
+# -----------------------------------------------------------------------------
 - name: (pve_ct_download) | with_token | Download Proxmox appliance container template(s)
   community.general.proxmox_template:
     api_host: "{{ pve_host }}"
