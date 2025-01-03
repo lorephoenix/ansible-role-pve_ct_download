@@ -27,12 +27,14 @@ The following variables can be customized to suit your environment. Default valu
 | :--- | :--- | :--- | :--- | :--- |
 | `pve_force`           | `false`               | Boolean  | Optional  | Force download if the template already exists.   |  
 | `pve_host`            | `proxmox.example.com` | String   | Mandatory | Proxmox host address.                            |
+| `pve_password `       | `*******`             | String   | Mandatory | Specify the password to authenticate with.       |
 | `pve_port`            | `8006`                | Integer  | Optional  | Proxmox API port.                                |
 | `pve_timeout`         | `500`                 | Integer  | Optional  | Timeout for template downloads.                  |
 | `pve_tokenid`         | `root@pam!mytokenid`  | String   | Mandatory | API token ID for authentication.                 |
 | `pve_token_secret `   | `*******`             | String   | Mandatory | API secret token                                 |
 | `pve_validate_certs`  | `false`               | Boolean  | Optional  | Whether to validate SSL certificates.            |
 
+If the variable `pve_password` is set, it takes precedence over the use of the `pve_token_secret` variable.
 
 ### Template items
 
@@ -62,7 +64,7 @@ Here’s an example of how to use this role:
 - name: (playbook) | Proxmox download latest CT image
   hosts: localhost
   vars_files:
-    - vault.yml  # Load encrypted file with Proxmox token (pve_token_secret)
+    - vault.yml  # Load encrypted file with Proxmox token (pve_token_secret or pve_password)
   roles:
     - role: pve_ct_download
       vars:
