@@ -69,81 +69,25 @@
     - preliminary
     - prerequisite
 
-- name: (pve_ct_download) | main | Proxmox connectivity ...
+# -------------------------------------------------------------------------
+# Dynamically include the task a list
+# -------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Dynamically include the task 'with_token'.
+  ansible.builtin.include_tasks: "with_token.yml"
   when:
+    - pve_password is none or pve_password is undefined
+    - pve_token_secret is not none
     - latest_image is defined
     - latest_image|length > 0
-  block:
+  tags:
+    - prerequisite
 
-    # -------------------------------------------------------------------------
-    # Retrieves a list of nodes in the Proxmox cluster.
-    # -------------------------------------------------------------------------
-    - name: (pve_ct_download) | main | Retrieve Proxmox node information
-      community.general.proxmox_node_info:
-        api_host: "{{ pve_host }}"
-        api_port: "{{ pve_port }}"
-        api_token_id: "{{ pve_tokenid.split('!')[1] }}"
-        api_token_secret: "{{ pve_token_secret }}"
-        api_user: "{{ pve_tokenid.split('!')[0] }}"
-        validate_certs: "{{ pve_validate_certs | default(false) }}"
-      register: this
-      tags:
-        - prerequisite
-
-    # -------------------------------------------------------------------------
-    # Filters and selects nodes for template application.
-    # -------------------------------------------------------------------------
-    - name: (pve_ct_download) | main | Extract node names from Proxmox node information
-      ansible.builtin.set_fact:
-        nodes: >-
-          {{ this.proxmox_nodes | map(attribute='node') }}
-      tags:
-        - prerequisite
-
-    # -------------------------------------------------------------------------
-    # Downloads the latest template image to the specified storage on the
-    # selected nodes.
-    # -------------------------------------------------------------------------
-    - name: (pve_ct_download) | main | Retrieve Proxmox storage information
-      community.general.proxmox_storage_info:
-        api_host: "{{ pve_host }}"
-        api_port: "{{ pve_port | default(8006) }}"
-        api_token_id: "{{ pve_tokenid.split('!')[1] }}"
-        api_token_secret: "{{ pve_token_secret }}"
-        api_user: "{{ pve_tokenid.split('!')[0] }}"
-        validate_certs: "{{ pve_validate_certs | default(false) }}"
-      register: this
-      tags:
-        - prerequisite
-
-    # -------------------------------------------------------------------------
-    # Filters storages that support template storage and ensures at least one is available.
-    # -------------------------------------------------------------------------
-    - name: (pve_ct_download) | main | Filter storages supporting VZ templates
-      ansible.builtin.set_fact:
-        filtered_storages: >-
-            {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
-      tags:
-        - prerequisite
-
-    - name: (pve_ct_download) | main | Fail if no suitable storage is found
-      ansible.builtin.fail:
-        msg: "No suitable storage(s) supporting VZ templates found in the cluster."
-      when: filtered_storages|length == 0
-      tags:
-        - prerequisite
-
-    - name: (pve_ct_download) | main | Download Proxmox appliance container template(s)
-      community.general.proxmox_template:
-        api_host: "{{ pve_host }}"
-        api_port: "{{ pve_port | default(8006) }}"
-        api_token_id: "{{ pve_tokenid.split('!')[1] }}"
-        api_token_secret: "{{ pve_token_secret }}"
-        api_user: "{{ pve_tokenid.split('!')[0] }}"
-        node: "{{ item.0 }}"
-        state: "present"
-        storage: "{{ item.1 }}"
-        template: "{{ item.2 }}"
-        timeout: "{{ pve_timeout | default(0) }}"
-        force: "{{ pve_force | default(false) }}"
-      loop: "{{ query('nested', nodes, filtered_storages, latest_image) }}"
+- name: (pve_ct_download) | main | Dynamically include the task 'without_token'.
+  ansible.builtin.include_tasks: "without_token.yml"
+  when:
+    - pve_password is defined
+    - pve_password is not none
+    - latest_image is defined
+    - latest_image|length > 0
+  tags:
+    - prerequisite
