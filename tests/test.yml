@@ -10,7 +10,7 @@
         pve_port: 8006
         pve_timeout: 500
         pve_tokenid: "root@pam!Ansible"
-        pve_token_secret: "secret"
+        pve_password: "secret"
         pve_validate_certs: false
         
         # Template items
