@@ -77,10 +77,9 @@
   when:
     - pve_password is none or pve_password is undefined
     - pve_token_secret is not none
-    - pcl_latest_image is defined
-    - pcl_latest_image|length > 0
   tags:
     - prerequisite
+    - storage_container
 
 # -------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
@@ -90,7 +89,6 @@
   when:
     - pve_password is defined
     - pve_password is not none
-    - pcl_latest_image is defined
-    - pcl_latest_image|length > 0
   tags:
     - prerequisite
+    - storage_container
