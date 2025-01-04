@@ -16,6 +16,9 @@
   ansible.builtin.set_fact:
     pcl_nodes: >-
       {{ pcl_parsed_nodes.proxmox_nodes | map(attribute='node') }}
+  tags:
+    - prerequisite
+    - storage_container
 
 # -----------------------------------------------------------------------------
 # Filters storages that support template storage and ensures at least one is available.
@@ -24,8 +27,12 @@
   ansible.builtin.set_fact:
     pcl_filtered_storages: >-
         {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
-
+  tags:
+    - prerequisite
+  
 - name: (pve_ct_download) | facts | Fail if no suitable storage is found
   ansible.builtin.fail:
     msg: "No suitable storage(s) supporting VZ templates found in the cluster."
   when: pcl_filtered_storages|length == 0
+  tags:
+    - prerequisite
