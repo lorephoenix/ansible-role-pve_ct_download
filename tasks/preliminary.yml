@@ -25,7 +25,7 @@
 # -----------------------------------------------------------------------------
 - name: (pve_ct_download) | preliminary | Extract and parse images and date from content
   ansible.builtin.set_fact:
-    latest_image: "{{ this.content | lastest_image(pve_template) }}"
+    pcl_latest_image: "{{ this.content | lastest_image(pve_template) }}"
 
 # -----------------------------------------------------------------------------
 # Ensures that a valid image is found for the OS, or the task fails.
@@ -34,5 +34,5 @@
   ansible.builtin.fail:
     msg: "No image found for OS {{ pve_template }}."
   when:
-    - latest_image is not defined
-    - latest_image|length == 0
+    - pcl_latest_image is not defined
+    - pcl_latest_image|length == 0
