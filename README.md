@@ -73,7 +73,6 @@ Here’s an example of how to use this role:
         pve_tokenid: "root@pam!Ansible"
 
         # Template items
-        pve_base_url: "http://download.proxmox.com/images/system/"
         pve_template: 
           - "centos"
           - "ubuntu"
