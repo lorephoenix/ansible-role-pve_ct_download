@@ -72,22 +72,25 @@
 # -------------------------------------------------------------------------
 # Dynamically include the task a list
 # -------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Dynamically include the task 'with_token'.
-  ansible.builtin.include_tasks: "with_token.yml"
+- name: (pve_ct_download) | main | Dynamically include the task 'use_token'.
+  ansible.builtin.include_tasks: "use_token.yml"
   when:
     - pve_password is none or pve_password is undefined
     - pve_token_secret is not none
-    - latest_image is defined
-    - latest_image|length > 0
+    - pcl_latest_image is defined
+    - pcl_latest_image|length > 0
   tags:
     - prerequisite
 
-- name: (pve_ct_download) | main | Dynamically include the task 'without_token'.
-  ansible.builtin.include_tasks: "without_token.yml"
+# -------------------------------------------------------------------------
+# Import task the current playbook for subsequent execution
+# -------------------------------------------------------------------------
+- name: (pve_ct_download) | main | Dynamically include the task 'use_password'.
+  ansible.builtin.include_tasks: "use_password.yml"
   when:
     - pve_password is defined
     - pve_password is not none
-    - latest_image is defined
-    - latest_image|length > 0
+    - pcl_latest_image is defined
+    - pcl_latest_image|length > 0
   tags:
     - prerequisite
