@@ -14,8 +14,8 @@
 # -----------------------------------------------------------------------------
 - name: (pve_ct_download) | facts | Extract node names from Proxmox node information
   ansible.builtin.set_fact:
-    pcl_nodes: >-
-      {{ pcl_parsed_nodes.proxmox_nodes | map(attribute='node') }}
+    all_nodes: >-
+      {{ parsed_all_nodes.proxmox_nodes | map(attribute='node') }}
   tags:
     - prerequisite
     - storage_container
