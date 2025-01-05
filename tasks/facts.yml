@@ -29,7 +29,7 @@
         {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
   tags:
     - prerequisite
-  
+
 - name: (pve_ct_download) | facts | Fail if no suitable storage is found
   ansible.builtin.fail:
     msg: "No suitable storage(s) supporting VZ templates found in the cluster."
