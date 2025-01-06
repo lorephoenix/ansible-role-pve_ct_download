@@ -12,7 +12,8 @@
 # -----------------------------------------------------------------------------
 # Retrieves a list of nodes in the Proxmox cluster.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | use_token | Retrieve Proxmox node information
+- name: >-
+    | use_token.yml | Retrieve Proxmox node information
   community.general.proxmox_node_info:
     api_host: "{{ pve_host }}"                           # The hostname or IP address of the API Proxmox server.
     api_port: "{{ pve_port | default(8006) }}"           # The port to connect to (default is 8006 for Proxmox API).
@@ -28,7 +29,8 @@
 # -----------------------------------------------------------------------------
 # Retrieve Proxmox storage information.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | use_token | Retrieve Proxmox storage information
+- name: >-
+    | use_token.yml | Retrieve Proxmox storage information
   community.general.proxmox_storage_info:
     api_host: "{{ pve_host }}"                           # The hostname or IP address of the API Proxmox server.
     api_port: "{{ pve_port | default(8006) }}"           # The port to connect to (default is 8006 for Proxmox API).
@@ -44,7 +46,8 @@
 # -----------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | use_token | Import 'facts' task statically
+- name: >-
+    | use_token.yml | Import 'facts' task statically
   ansible.builtin.include_tasks: "facts.yml"
   tags:
     - prerequisite
@@ -54,7 +57,8 @@
 # Downloads the latest template image to the specified storage on the
 # selected nodes.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | use_token | Download Proxmox appliance container template(s)
+- name: >-
+    | use_token.yml | Download Proxmox appliance container template(s)
   community.general.proxmox_template:
     api_host: "{{ pve_host }}"                           # The hostname or IP address of the API Proxmox server.
     api_port: "{{ pve_port | default(8006) }}"           # The port to connect to (default is 8006 for Proxmox API).
