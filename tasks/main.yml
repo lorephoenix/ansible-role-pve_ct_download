@@ -68,6 +68,7 @@
   tags:
     - preliminary
     - prerequisite
+    - storage_template
 
 # -------------------------------------------------------------------------
 # Dynamically include the task a list
@@ -80,6 +81,7 @@
   tags:
     - prerequisite
     - storage_container
+    - storage_template
 
 # -------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
@@ -92,3 +94,4 @@
   tags:
     - prerequisite
     - storage_container
+    - storage_template
