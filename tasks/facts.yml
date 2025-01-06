@@ -25,14 +25,16 @@
 # -----------------------------------------------------------------------------
 - name: (pve_ct_download) | facts | Filter storages supporting VZ templates
   ansible.builtin.set_fact:
-    pcl_filtered_storages: >-
+    template_storages: >-
         {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
   tags:
     - prerequisite
+    - storage_template
 
 - name: (pve_ct_download) | facts | Fail if no suitable storage is found
   ansible.builtin.fail:
     msg: "No suitable storage(s) supporting VZ templates found in the cluster."
-  when: pcl_filtered_storages|length == 0
+  when: template_storages|length == 0
   tags:
     - prerequisite
+    - storage_template
