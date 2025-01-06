@@ -12,7 +12,8 @@
 # -----------------------------------------------------------------------------
 # Load variables from files, dynamically within a task
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Load OS dependent variables
+- name: >-
+    | main.yml | Load OS dependent variables
   ansible.builtin.include_vars: '{{ item_os }}'
   with_first_found:
     - files:
@@ -29,14 +30,16 @@
 # -----------------------------------------------------------------------------
 # Ensure variable(s) meets condition(s)
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | main | OS is supported.
+- name: >-
+    | main.yml | OS is supported.
   ansible.builtin.assert:
     that: os_supported == True
 
 # -----------------------------------------------------------------------------
 # Use universal package manager to install required package(s)
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Ensure that the Linux packages are installed
+- name: >-
+    | main.yml | Ensure that the Linux packages are installed
   become: true
   ansible.builtin.package:
     name: '{{ item }}'
@@ -48,7 +51,8 @@
 # -----------------------------------------------------------------------------
 # Manage Python library dependencies
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Install python package
+- name: >-
+    | main.yml | Install python package
   ansible.builtin.pip:
     break_system_packages: true
     name: "{{ item }}"
@@ -63,7 +67,8 @@
 # -----------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Import 'preliminary' task statically
+- name: >-
+    | main.yml | Import 'preliminary' task statically
   ansible.builtin.import_tasks: "preliminary.yml"
   tags:
     - preliminary
@@ -73,7 +78,8 @@
 # -------------------------------------------------------------------------
 # Dynamically include the task a list
 # -------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Dynamically include the task 'use_token'.
+- name: >-
+    | main.yml | Dynamically include the task 'use_token'.
   ansible.builtin.include_tasks: "use_token.yml"
   when:
     - pve_password is none or pve_password is undefined
@@ -86,7 +92,8 @@
 # -------------------------------------------------------------------------
 # Import task the current playbook for subsequent execution
 # -------------------------------------------------------------------------
-- name: (pve_ct_download) | main | Dynamically include the task 'use_password'.
+- name: >-
+    | main.yml | Dynamically include the task 'use_password'.
   ansible.builtin.include_tasks: "use_password.yml"
   when:
     - pve_password is defined
