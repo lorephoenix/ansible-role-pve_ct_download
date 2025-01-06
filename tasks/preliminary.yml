@@ -12,25 +12,31 @@
 # -----------------------------------------------------------------------------
 # Fetches the list of templates from the specified URL.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | preliminary | Get the list of files from the URL
+- name: >-
+    | preliminary.yml | Get the list of files from the URL
   ansible.builtin.uri:
     url: "{{ pve_base_url }}"
+    follow_redirects: "safe"
     return_content: true
-  register: this
-  failed_when:
-    - "this.status != 200"
+    use_proxy: true
+  register: _result
+  until: _result.status == 200
+  retries: 8  # 8 * 15 seconds = 2 minutes
+  delay: 15   # Every 5 seconds
 
 # -----------------------------------------------------------------------------
 # Extracts the latest image for the specified OS based on naming conventions.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | preliminary | Extract and parse images and date from content
+- name: >-
+    | preliminary.yml | Extract and parse images and date from content
   ansible.builtin.set_fact:
-    latest_image: "{{ this.content | lastest_image(pve_template) }}"
+    latest_image: "{{ _result.content | lastest_image(pve_template) }}"
 
 # -----------------------------------------------------------------------------
 # Ensures that a valid image is found for the OS, or the task fails.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | preliminary | Fail if no image is found for the specified OS
+- name: >-
+    | preliminary.yml | Fail if no image is found for the specified OS
   ansible.builtin.fail:
     msg: "No image found for OS {{ pve_template }}."
   when:
