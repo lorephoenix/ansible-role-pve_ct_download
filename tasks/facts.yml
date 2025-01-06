@@ -12,7 +12,8 @@
 # -----------------------------------------------------------------------------
 # Filters and selects nodes for template application.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | facts | Extract node names from Proxmox node information
+- name: >-
+    | facts.yml | Extract node names from Proxmox node information
   ansible.builtin.set_fact:
     all_nodes: >-
       {{ parsed_all_nodes.proxmox_nodes | map(attribute='node') }}
@@ -23,7 +24,8 @@
 # -----------------------------------------------------------------------------
 # Filters storages that support template storage and ensures at least one is available.
 # -----------------------------------------------------------------------------
-- name: (pve_ct_download) | facts | Filter storages supporting VZ templates
+- name: >-
+    | facts.yml | Filter storages supporting VZ templates
   ansible.builtin.set_fact:
     template_storages: >-
         {{ this.proxmox_storages | selectattr('content', 'search', 'vztmpl') | map(attribute='storage') | list }}
@@ -31,7 +33,8 @@
     - prerequisite
     - storage_template
 
-- name: (pve_ct_download) | facts | Fail if no suitable storage is found
+- name: >-
+    | facts.yml | Fail if no suitable storage is found
   ansible.builtin.fail:
     msg: "No suitable storage(s) supporting VZ templates found in the cluster."
   when: template_storages|length == 0
